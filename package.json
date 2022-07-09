@@ -1,0 +1,26 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "The second training project - Difference calculator, it's allow to get information at difference between two files.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/usergitvv/frontend-project-lvl2.git"
+  },
+  "bin": {
+    "gendiff": "./bin/gendiff.js"
+  },
+  "author": "Voronkov Valeriy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/usergitvv/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/usergitvv/frontend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^9.3.0"
+  }
+}
