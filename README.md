@@ -2,7 +2,7 @@
 [![Actions Status](https://github.com/usergitvv/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/usergitvv/frontend-project-lvl2/actions)
 
 ### GitHub-check status:
-[![Github Status](https://github.com/usergitvv/frontend-project-lvl2/workflows/git-hub-check/badge.svg)](https://github.com/usergitvv/frontend-project-lvl2/actions)
+[![Github Status](https://github.com/usergitvv/frontend-project-lvl2/workflows/git-hub-check.yml/badge.svg)](https://github.com/usergitvv/frontend-project-lvl2/actions)
 
 ### Codeclimate status:
 [![Maintainability](https://api.codeclimate.com/v1/badges/9e23c8298b71cf6d96ea/maintainability)](https://codeclimate.com/github/usergitvv/frontend-project-lvl2/maintainability)
