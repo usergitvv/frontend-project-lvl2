@@ -2,8 +2,6 @@
 [![Actions Status](https://github.com/usergitvv/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/usergitvv/frontend-project-lvl2/actions)
 
 ### GitHub-check status:
-<!-- [![Github Status](https://github.com/usergitvv/frontend-project-lvl2/.github/workflows/git-hub-check.yml/badge.svg?event=push)](https://github.com/usergitvv/frontend-project-lvl2/actions) -->
-
 [![Github Status](https://github.com/usergitvv/frontend-project-lvl1/workflows/git-hub-check/badge.svg)](https://github.com/usergitvv/frontend-project-lvl1/actions)
 
 ### Codeclimate status:
