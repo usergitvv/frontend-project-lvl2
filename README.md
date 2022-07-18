@@ -12,3 +12,6 @@
 
 #### Пример работы пакета "Вычислитель отличий" (example of working the "Difference Calculator" package):
 [![asciicast](https://asciinema.org/a/BKLPHoLVD56Gfms2A9CI22dsL.svg)](https://asciinema.org/a/BKLPHoLVD56Gfms2A9CI22dsL)
+
+#### Пример работы пакета "Вычислитель отличий" - сравнение файлов (example of working the "Difference Calculator" package - the files' comparison):
+[![asciicast](https://asciinema.org/a/p1horwmqFBdYYfdIrnmY62vqc.svg)](https://asciinema.org/a/p1horwmqFBdYYfdIrnmY62vqc)

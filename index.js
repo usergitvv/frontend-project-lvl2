@@ -4,47 +4,41 @@ import path from 'node:path';
 
 import fs from 'node:fs';
 
-import _ from 'lodash';
+import yaml from 'js-yaml';
+
+import parser from './parsers.js';
 
 const genDiff = (path1, path2) => {
   let data1;
   let data2;
-  if (path1.includes(cwd()) && path.extname(path1) === '.json') {
+  if (path1.includes(cwd())) {
     data1 = fs.readFileSync(path1);
   }
-  if (!path1.includes(cwd()) && path.extname(path1) === '.json') {
+  if (!path1.includes(cwd())) {
     data1 = fs.readFileSync(path.resolve(`${cwd()}/${path1}`));
   }
-  if (path2.includes(cwd()) && path.extname(path2) === '.json') {
+  if (path2.includes(cwd())) {
     data2 = fs.readFileSync(path2);
   }
-  if (!path2.includes(cwd()) && path.extname(path2) === '.json') {
+  if (!path2.includes(cwd())) {
     data2 = fs.readFileSync(path.resolve(`${cwd()}/${path2}`));
   }
-  const object1 = JSON.parse(data1);
-  const object2 = JSON.parse(data2);
-  const keys1 = Object.keys(object1).sort();
-  const keys2 = Object.keys(object2).sort();
-  const common = _.uniq([...keys1, ...keys2]);
-  let results = '';
-  //  eslint-disable-next-line no-restricted-syntax
-  for (const key of common) {
-    const object1Key = Object.prototype.hasOwnProperty.call(object1, key);
-    const object2Key = Object.prototype.hasOwnProperty.call(object2, key);
-    if (object1Key && object2Key && object1[key] === object2[key]) {
-      results += `    ${key}: ${object1[key]}\n`;
-    }
-    if (object1Key && object2Key && object1[key] !== object2[key]) {
-      results += `  - ${key}: ${object1[key]}\n  + ${key}: ${object2[key]}\n`;
-    }
-    if (object1Key && !object2Key) {
-      results += `  - ${key}: ${object1[key]}\n`;
-    }
-    if (!object1Key && object2Key) {
-      results += `  + ${key}: ${object2[key]}\n`;
-    }
+  if (path.extname(path1) === '.json' && path.extname(path2) === '.json') {
+    const object1 = JSON.parse(data1);
+    const object2 = JSON.parse(data2);
+    return parser(object1, object2);
   }
-  return `{\n${results}}`;
+  if ((path.extname(path1) === '.yml' && path.extname(path2) === '.yml')
+  || (path.extname(path1) === '.yaml' && path.extname(path2) === '.yaml')
+  || (path.extname(path1) === '.yaml' && path.extname(path2) === '.yml')
+  || (path.extname(path1) === '.yml' && path.extname(path2) === '.yaml')) {
+    const object1 = yaml.load(fs.readFileSync(path1, 'utf-8'));
+    const object2 = yaml.load(fs.readFileSync(path2, 'utf-8'));
+    if (object1 === undefined) return parser({}, object2);
+    if (object2 === undefined) return parser(object1, {});
+    return parser(object1, object2);
+  }
+  return '📣 Error, it is working with .json, .yml and .yaml formats only!';
 };
 
 export default genDiff;
