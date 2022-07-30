@@ -4,11 +4,9 @@ import path from 'node:path';
 
 import fs from 'node:fs';
 
-import yaml from 'js-yaml';
+import { parserJson, parserYaml } from './parsers.js';
 
-import parser from './parsers.js';
-
-const genDiff = (path1, path2) => {
+const genDiff = (path1, path2, formater) => {
   let data1;
   let data2;
   if (path1.includes(cwd())) {
@@ -24,19 +22,16 @@ const genDiff = (path1, path2) => {
     data2 = fs.readFileSync(path.resolve(`${cwd()}/${path2}`));
   }
   if (path.extname(path1) === '.json' && path.extname(path2) === '.json') {
-    const object1 = JSON.parse(data1);
-    const object2 = JSON.parse(data2);
-    return parser(object1, object2);
+    return formater(parserJson(data1, data2));
   }
   if ((path.extname(path1) === '.yml' && path.extname(path2) === '.yml')
   || (path.extname(path1) === '.yaml' && path.extname(path2) === '.yaml')
   || (path.extname(path1) === '.yaml' && path.extname(path2) === '.yml')
   || (path.extname(path1) === '.yml' && path.extname(path2) === '.yaml')) {
-    const object1 = yaml.load(fs.readFileSync(path1, 'utf-8'));
-    const object2 = yaml.load(fs.readFileSync(path2, 'utf-8'));
-    if (object1 === undefined) return parser({}, object2);
-    if (object2 === undefined) return parser(object1, {});
-    return parser(object1, object2);
+    const [object1, object2] = parserYaml(path1, path2);
+    if (object1 === undefined) return formater(parserYaml({}, object2));
+    if (object2 === undefined) return formater(parserYaml(object1, {}));
+    return formater(parserYaml(path1, path2));
   }
   return '📣 Error, it is working with .json, .yml and .yaml formats only!';
 };
