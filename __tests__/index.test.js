@@ -17,8 +17,8 @@ test('expectedDiffJson', () => {
 });
 
 test('expectedDiffJson2', () => {
-  const path1 = getFixturePath('file1.json');
-  const path2 = getFixturePath('testEmptyFile.json');
+  const path1 = getFixturePath('testEmptyFile.json');
+  const path2 = getFixturePath('file2.json');
   expect(genDiff(path1, path2)).toEqual(result2);
 });
 
@@ -29,8 +29,8 @@ test('expectedDiffYml', () => {
 });
 
 test('expectedDiffYml2', () => {
-  const path1 = getFixturePath('file3.yml');
-  const path2 = getFixturePath('testEmptyFile.yaml');
+  const path1 = getFixturePath('testEmptyFile.yaml');
+  const path2 = getFixturePath('file4.yml');
   expect(genDiff(path1, path2)).toEqual(result2);
 });
 

@@ -11,7 +11,7 @@ const result = `{
         }
         setting6: {
             doge: {
-              - wow: 
+              - wow:${' '}
               + wow: so much
             }
             key: value
@@ -27,13 +27,13 @@ const result = `{
         }
       + nest: str
     }
-    - group2: {
+  - group2: {
         abc: 12345
         deep: {
             id: 45
         }
     }
-    + group3: {
+  + group3: {
         deep: {
             id: {
                 number: 45
@@ -44,31 +44,35 @@ const result = `{
 }`;
 
 const result2 = `{
-    - common: {        
-         setting1: Value 1
-         setting2: 200
-         setting3: true
-         setting6: {
-             doge: {
-                 wow:
-              }
-             key: value
-             ops: vops
-          }
-      }
-    - group1: {
-         baz: bars
-         foo: bar        
-         nest: str
-      }    
-    - group3: {
-          deep: {
-             id: {
-                 number: 45
-              }
-          }
-          fee: 100500
-      }
+  + common: {
+        follow: false
+        setting1: Value 1
+        setting3: null
+        setting4: blah blah
+        setting5: {
+            key5: value5
+        }
+        setting6: {
+            key: value
+            ops: vops
+            doge: {
+                wow: so much
+            }
+        }
+    }
+  + group1: {
+        foo: bar
+        baz: bars
+        nest: str
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+        fee: 100500
+    }
 }`;
 
 export {

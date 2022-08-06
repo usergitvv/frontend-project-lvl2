@@ -6,7 +6,9 @@ import fs from 'node:fs';
 
 import { parserJson, parserYaml } from './parsers.js';
 
-const genDiff = (path1, path2, formater) => {
+import stylish from './stylish.js';
+
+const genDiff = (path1, path2) => {
   let data1;
   let data2;
   if (path1.includes(cwd())) {
@@ -22,16 +24,13 @@ const genDiff = (path1, path2, formater) => {
     data2 = fs.readFileSync(path.resolve(`${cwd()}/${path2}`));
   }
   if (path.extname(path1) === '.json' && path.extname(path2) === '.json') {
-    return formater(parserJson(data1, data2));
+    return stylish(parserJson(data1, data2));
   }
   if ((path.extname(path1) === '.yml' && path.extname(path2) === '.yml')
   || (path.extname(path1) === '.yaml' && path.extname(path2) === '.yaml')
   || (path.extname(path1) === '.yaml' && path.extname(path2) === '.yml')
   || (path.extname(path1) === '.yml' && path.extname(path2) === '.yaml')) {
-    const [object1, object2] = parserYaml(path1, path2);
-    if (object1 === undefined) return formater(parserYaml({}, object2));
-    if (object2 === undefined) return formater(parserYaml(object1, {}));
-    return formater(parserYaml(path1, path2));
+    return stylish(parserYaml(path1, path2));
   }
   return '📣 Error, it is working with .json, .yml and .yaml formats only!';
 };
