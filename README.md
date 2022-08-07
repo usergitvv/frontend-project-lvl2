@@ -13,5 +13,8 @@
 #### Пример работы пакета "Вычислитель отличий" (example of working the "Difference Calculator" package):
 [![asciicast](https://asciinema.org/a/BKLPHoLVD56Gfms2A9CI22dsL.svg)](https://asciinema.org/a/BKLPHoLVD56Gfms2A9CI22dsL)
 
-#### Пример работы пакета "Вычислитель отличий" - сравнение файлов (example of working the "Difference Calculator" package - the files' comparison):
+#### Пример работы пакета "Вычислитель отличий" - сравнение простых файлов (example of working the "Difference Calculator" package - comparison of simple files):
 [![asciicast](https://asciinema.org/a/p1horwmqFBdYYfdIrnmY62vqc.svg)](https://asciinema.org/a/p1horwmqFBdYYfdIrnmY62vqc)
+
+#### Пример работы пакета "Вычислитель отличий" - сравнение сложных файлов (example of working the "Difference Calculator" package - comparison of complex files):
+[![asciicast](https://asciinema.org/a/ebRTpv1SFn8Vqn8tHlWCINmsw.svg)](https://asciinema.org/a/ebRTpv1SFn8Vqn8tHlWCINmsw)
