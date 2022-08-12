@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import getKeysArray from '../utils.js';
+
 const spacesCount = 0;
 
 const getObjectInfo = (value, spaceLength) => {
@@ -21,11 +23,7 @@ const getObjectInfo = (value, spaceLength) => {
 };
 
 const getDiffInfo = (spaceLength, handler) => {
-  const file1 = { ...handler[0] };
-  const file2 = { ...handler[1] };
-  const keys1 = Object.keys(file1);
-  const keys2 = Object.keys(file2);
-  const common = _.uniq([...keys1, ...keys2]).sort();
+  const [file1, file2, common] = getKeysArray(handler);
   const result = common.map((key) => {
     const file1Key = Object.prototype.hasOwnProperty.call(file1, key);
     const file2Key = Object.prototype.hasOwnProperty.call(file2, key);

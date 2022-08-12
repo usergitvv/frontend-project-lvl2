@@ -18,3 +18,6 @@
 
 #### Пример работы пакета "Вычислитель отличий" - сравнение сложных файлов (example of working the "Difference Calculator" package - comparison of complex files):
 [![asciicast](https://asciinema.org/a/ebRTpv1SFn8Vqn8tHlWCINmsw.svg)](https://asciinema.org/a/ebRTpv1SFn8Vqn8tHlWCINmsw)
+
+#### Пример работы пакета "Вычислитель отличий" - сравнение сложных файлов через форматтер plain (example of working the "Difference Calculator" package - comparison of complex files by help of plain-formatter):
+[![asciicast](https://asciinema.org/a/t5YvVanxs9E5i8rSIPWB0uU7v.svg)](https://asciinema.org/a/t5YvVanxs9E5i8rSIPWB0uU7v)

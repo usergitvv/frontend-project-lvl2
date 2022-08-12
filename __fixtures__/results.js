@@ -1,4 +1,4 @@
-const result = `{
+const stylishResult = `{
     common: {
       + follow: false
         setting1: Value 1
@@ -43,7 +43,7 @@ const result = `{
     }
 }`;
 
-const result2 = `{
+const stylishResult2 = `{
   + common: {
         follow: false
         setting1: Value 1
@@ -76,6 +76,6 @@ const result2 = `{
 }`;
 
 export {
-  result,
-  result2,
+  stylishResult,
+  stylishResult2,
 };
