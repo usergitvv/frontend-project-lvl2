@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import getKeysArray from '../utils.js';
 
-// gendiff -f plain __fixtures__/file1.json __fixtures__/file2.json
-
 const property = 'Property \'';
 
 const getMergeInfo = (prop, handler) => {
