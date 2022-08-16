@@ -20,4 +20,7 @@
 [![asciicast](https://asciinema.org/a/ebRTpv1SFn8Vqn8tHlWCINmsw.svg)](https://asciinema.org/a/ebRTpv1SFn8Vqn8tHlWCINmsw)
 
 #### Пример работы пакета "Вычислитель отличий" - сравнение сложных файлов через форматтер plain (example of working the "Difference Calculator" package - comparison of complex files by help of plain-formatter):
-[![asciicast](https://asciinema.org/a/t5YvVanxs9E5i8rSIPWB0uU7v.svg)](https://asciinema.org/a/t5YvVanxs9E5i8rSIPWB0uU7v)
+[![asciicast](https://asciinema.org/a/Ifj1M4sG7iLx12JVDekuaLE83.svg)](https://asciinema.org/a/Ifj1M4sG7iLx12JVDekuaLE83)
+
+#### Пример работы пакета "Вычислитель отличий" - сравнение сложных файлов через форматтер json (example of working the "Difference Calculator" package - comparison of complex files by help of json-formatter):
+[![asciicast](https://asciinema.org/a/y8h8Ss1HhYdBVE5B1Fv4iguBp.svg)](https://asciinema.org/a/y8h8Ss1HhYdBVE5B1Fv4iguBp)

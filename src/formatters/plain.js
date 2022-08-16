@@ -11,45 +11,42 @@ const getMergeInfo = (prop, handler) => {
     if ((file1Key === file2Key) && !_.isObject(file1[key]) && !_.isObject(file2[key])
       && (file1[key] !== file2[key])) {
       if (typeof file1[key] === 'string' && typeof file2[key] === 'string') {
-        return `${prop}${key}' was updated. From '${file1[key]}' to '${file2[key]}'\n`;
+        return `${prop}${key}' was updated. From '${file1[key]}' to '${file2[key]}'`;
       }
       if (typeof file1[key] !== 'string' && typeof file2[key] === 'string') {
-        return `${prop}${key}' was updated. From ${file1[key]} to '${file2[key]}'\n`;
+        return `${prop}${key}' was updated. From ${file1[key]} to '${file2[key]}'`;
       }
       if (typeof file1[key] === 'string' && typeof file2[key] !== 'string') {
-        return `${prop}${key}' was updated. From '${file1[key]}' to ${file2[key]}\n`;
+        return `${prop}${key}' was updated. From '${file1[key]}' to ${file2[key]}`;
       }
-      return `${prop}${key}' was updated. From ${file1[key]} to ${file2[key]}\n`;
+      return `${prop}${key}' was updated. From ${file1[key]} to ${file2[key]}`;
     }
     if (file1Key && !file2Key) {
-      return `${prop}${key}' was removed\n`;
+      return `${prop}${key}' was removed`;
     }
     if (!file1Key && file2Key && !_.isObject(file2[key])) {
-      if (typeof file2[key] === 'string') return `${prop}${key}' was added with value: '${file2[key]}'\n`;
-      return `${prop}${key}' was added with value: ${file2[key]}\n`;
+      if (typeof file2[key] === 'string') return `${prop}${key}' was added with value: '${file2[key]}'`;
+      return `${prop}${key}' was added with value: ${file2[key]}`;
     }
     if (!file1Key && file2Key && _.isObject(file2[key])) {
-      return `${prop}${key}' was added with value: [complex value]\n`;
+      return `${prop}${key}' was added with value: [complex value]`;
     }
     if (file1Key === file2Key && _.isObject(file1[key]) && _.isObject(file2[key])) {
-      let keyNamesStr = '';
-      keyNamesStr += key;
+      const keyNamesStr = [];
+      keyNamesStr.push(key);
       return `${getMergeInfo(`${prop}${keyNamesStr}.`, [file1[key], file2[key]])}`;
     }
     if ((file1Key === file2Key) && _.isObject(file1[key]) && !_.isObject(file2[key])) {
-      if (typeof file2[key] === 'string') return `${prop}${key}' was updated. From [complex value] to '${file2[key]}'\n`;
-      return `${prop}${key}' was updated. From [complex value] to ${file2[key]}\n`;
+      if (typeof file2[key] === 'string') return `${prop}${key}' was updated. From [complex value] to '${file2[key]}'`;
+      return `${prop}${key}' was updated. From [complex value] to ${file2[key]}`;
     }
     if ((file1Key === file2Key) && !_.isObject(file1[key]) && _.isObject(file2[key])) {
       if (typeof file1[key] === 'string') return `${prop}${key}' was updated. From [complex value] to '${file1[key]}'`;
-      return `${prop}${key}' updated. From ${file1[key]} to [complex value]\n`;
+      return `${prop}${key}' updated. From ${file1[key]} to [complex value]`;
     }
     return null;
-  }).filter((item) => typeof item === 'string').reduce((acc, str) => {
-    const newAcc = acc + str;
-    return newAcc;
-  }, '');
-  return result;
+  }).filter((item) => typeof item === 'string');
+  return result.join('\n');
 };
 
 const plain = (parser) => getMergeInfo(property, parser);
