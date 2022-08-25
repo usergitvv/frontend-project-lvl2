@@ -1,6 +1,5 @@
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { test, expect } from '@jest/globals';
 import path from 'node:path';
 import genDiff from '../src/index.js';
 import {
@@ -12,34 +11,20 @@ const __dirname = dirname(__filename);
 
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
-const pathToJson1 = getFixturePath('file1.json');
-const pathToJson2 = getFixturePath('file2.json');
-const pathToEmptyJson = getFixturePath('testEmptyFile.json');
-const pathToYml3 = getFixturePath('file3.yml');
-const pathToYml4 = getFixturePath('file4.yml');
-const pathToEmptyYaml = getFixturePath('testEmptyFile.yaml');
-
 test.each([
-  [pathToJson1, pathToJson2, stylishResult],
-  [pathToEmptyJson, pathToJson2, stylishResult2],
-  [pathToYml3, pathToYml4, stylishResult],
-  [pathToEmptyYaml, pathToYml4, stylishResult2],
-])('diff_from_formatter-stylish', (path1, path2, result) => {
-  expect(genDiff(path1, path2)).toEqual(result);
+  [getFixturePath('file1.json'), getFixturePath('file2.json'), 'stylish', stylishResult],
+  [getFixturePath('testEmptyFile.json'), getFixturePath('file2.json'), 'stylish', stylishResult2],
+  [getFixturePath('file3.yml'), getFixturePath('file4.yml'), 'stylish', stylishResult],
+  [getFixturePath('testEmptyFile.yaml'), getFixturePath('file4.yml'), 'stylish', stylishResult2],
+  [getFixturePath('testEmptyFile.json'), getFixturePath('file2.json'), 'plain', plainResult],
+  [getFixturePath('file1.json'), getFixturePath('file2.json'), 'json', jsonResult],
+  [getFixturePath('testEmptyFile.json'), getFixturePath('file2.json'), 'json', jsonResult2],
+])('diff_from_formatters', (path1, path2, formatter, result) => {
+  expect(genDiff(path1, path2, formatter)).toEqual(result);
 });
 
 test('expected_diff_between_formats', () => {
-  const path2 = getFixturePath('file5.xml');
-  expect(genDiff(pathToYml3, path2)).toEqual('📣 Error, it is working with .json, .yml and .yaml formats only!');
-});
-
-test('diff_from_formatter-plain', () => {
-  expect(genDiff(pathToEmptyJson, pathToJson2, 'plain')).toEqual(plainResult);
-});
-
-test.each([
-  [pathToJson1, pathToJson2, 'json', jsonResult],
-  [pathToEmptyJson, pathToJson2, 'json', jsonResult2],
-])('diff_from_formatter-json', (path1, path2, formatter, result) => {
-  expect(genDiff(path1, path2, formatter)).toEqual(result);
+  expect(genDiff(getFixturePath('file3.yml'), getFixturePath('file5.xml')))
+    .toEqual(`📣 Error, it is working with .json, .yml (.yaml) formats only!
+    Also, both of files must to have same format.`);
 });

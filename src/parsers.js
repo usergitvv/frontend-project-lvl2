@@ -1,6 +1,6 @@
 import yaml from 'js-yaml';
 
-import fs from 'node:fs';
+import fs from 'fs';
 
 const parserJson = (file1, file2) => {
   const object1 = JSON.parse(file1);

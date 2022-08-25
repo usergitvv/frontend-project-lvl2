@@ -1,28 +1,25 @@
-import { cwd } from 'node:process';
+import path from 'path';
 
-import path from 'node:path';
+import fs from 'fs';
 
-import fs from 'node:fs';
-
-import { parserJson, parserYaml } from './parsers.js';
+import {
+  parserJson,
+  parserYaml,
+} from './parsers.js';
 
 import getResult from './formatters/index.js';
 
+const getData = (track) => {
+  let data = fs.readFileSync(track);
+  if (!track.includes(process.cwd())) {
+    data = fs.readFileSync(path.resolve(`${process.cwd()}/${track}`));
+  }
+  return data;
+};
+
 const genDiff = (path1, path2, formatName) => {
-  let data1;
-  let data2;
-  if (path1.includes(cwd())) {
-    data1 = fs.readFileSync(path1);
-  }
-  if (!path1.includes(cwd())) {
-    data1 = fs.readFileSync(path.resolve(`${cwd()}/${path1}`));
-  }
-  if (path2.includes(cwd())) {
-    data2 = fs.readFileSync(path2);
-  }
-  if (!path2.includes(cwd())) {
-    data2 = fs.readFileSync(path.resolve(`${cwd()}/${path2}`));
-  }
+  const data1 = getData(path1);
+  const data2 = getData(path2);
   if (path.extname(path1) === '.json' && path.extname(path2) === '.json') {
     return getResult(formatName, parserJson(data1, data2));
   }
@@ -32,7 +29,8 @@ const genDiff = (path1, path2, formatName) => {
   || (path.extname(path1) === '.yml' && path.extname(path2) === '.yaml')) {
     return getResult(formatName, parserYaml(path1, path2));
   }
-  return '📣 Error, it is working with .json, .yml and .yaml formats only!';
+  return `📣 Error, it is working with .json, .yml (.yaml) formats only!
+    Also, both of files must to have same format.`;
 };
 
 export default genDiff;
