@@ -1,10 +1,8 @@
 import _ from 'lodash';
 
-import getKeysArray from '../utils.js';
-
 const spacesCount = 0;
 
-const getObjectInfo = (value, spaceLength) => {
+const getObjectString = (object, spaceLength) => {
   const getString = (obj, length) => {
     const objInfo = Object.entries(obj);
     const result = objInfo.map((item) => {
@@ -19,50 +17,49 @@ const getObjectInfo = (value, spaceLength) => {
       }, '');
     return result;
   };
-  return `{\n${getString(value, spaceLength)}${' '.repeat(spaceLength + 2)}  }`;
+  return `{\n${getString(object, spaceLength)}${' '.repeat(spaceLength + 4)}}`;
 };
 
-const getDiffInfo = (spaceLength, handler) => {
-  const [file1, file2, common] = getKeysArray(handler);
-  const result = common.map((key) => {
-    const file1Key = Object.prototype.hasOwnProperty.call(file1, key);
-    const file2Key = Object.prototype.hasOwnProperty.call(file2, key);
-    if ((file1Key === file2Key) && (file1[key] === file2[key])) {
-      return `${' '.repeat(spaceLength + 2)}  ${key}: ${file1[key]}`;
-    }
-    if ((file1Key === file2Key) && !_.isObject(file1[key]) && !_.isObject(file2[key])
-      && (file1[key] !== file2[key])) {
-      return `${' '.repeat(spaceLength)}  - ${key}: ${file1[key]}\n${' '.repeat(spaceLength)}  + ${key}: ${file2[key]}`;
-    }
-    if ((file1Key && !file2Key) && !_.isObject(file1[key])) {
-      return `${' '.repeat(spaceLength)}  - ${key}: ${file1[key]}`;
-    }
-    if (!file1Key && file2Key && !_.isObject(file2[key])) {
-      return `${' '.repeat(spaceLength)}  + ${key}: ${file2[key]}`;
-    }
-    if ((file1Key === file2Key) && _.isObject(file1[key]) && _.isObject(file2[key])) {
-      return `${' '.repeat(spaceLength + 2)}  ${key}: {\n${getDiffInfo(spaceLength + 4, [file1[key], file2[key]])}${' '.repeat(spaceLength + 4)}}`;
-    }
-    if (file1Key && !file2Key && _.isObject(file1[key])) {
-      return `${' '.repeat(spaceLength)}  - ${key}: ${getObjectInfo(file1[key], spaceLength)}`;
-    }
-    if (!file1Key && file2Key && _.isObject(file2[key])) {
-      return `${' '.repeat(spaceLength)}  + ${key}: ${getObjectInfo(file2[key], spaceLength)}`;
-    }
-    if ((file1Key === file2Key) && _.isObject(file1[key]) && !_.isObject(file2[key])) {
-      return `${' '.repeat(spaceLength)}  - ${key}: ${getObjectInfo(file1[key], spaceLength)}\n${' '.repeat(spaceLength)}  + ${key}: ${file2[key]}`;
-    }
-    if ((file1Key === file2Key) && !_.isObject(file1[key]) && _.isObject(file2[key])) {
-      return `${' '.repeat(spaceLength)}  - ${key}: ${file1[key]}\n    + ${key}: ${getObjectInfo(file2[key], spaceLength)}`;
-    }
-    return null;
-  }).reduce((acc, str) => {
-    const newAcc = `${acc + str}\n`;
-    return newAcc;
-  }, '');
-  return result;
+const stylish = (tree) => {
+  if (tree === null) {
+    return `📣 Error, it is working with .json, .yml (.yaml) formats only!
+    Also, both of files must to have same format.`;
+  }
+  const getDiffInfo = (workpiece, spaceLength) => {
+    const result = workpiece.map((obj) => {
+      switch (obj.type) {
+        case 'equal':
+          return `${' '.repeat(spaceLength)}    ${obj.name}: ${obj.value}`;
+        case 'removed':
+          if (_.has(obj, 'children')) {
+            return `${' '.repeat(spaceLength)}  - ${obj.name}: ${getObjectString(obj.children[0], spaceLength)}`;
+          }
+          return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value}`;
+        case 'added':
+          if (_.has(obj, 'children')) {
+            return `${' '.repeat(spaceLength)}  + ${obj.name}: ${getObjectString(obj.children[0], spaceLength)}`;
+          }
+          return `${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value}`;
+        case 'changed':
+          if (_.isObject(obj.value1)) {
+            return `${' '.repeat(spaceLength)}  - ${obj.name}: ${getObjectString(obj.value1, spaceLength)}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value2}`;
+          }
+          if (_.isObject(obj.value2)) {
+            return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value1}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${getObjectString(obj.value2, spaceLength)}`;
+          }
+          return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value1}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value2}`;
+        case 'nested':
+          return `${' '.repeat(spaceLength)}    ${obj.name}: {\n${getDiffInfo(obj.children, spaceLength + 4)}${' '.repeat(spaceLength + 2)}  }`;
+        default:
+          throw new Error(`Unknown order state: '${obj.type}'!`);
+      }
+    }).reduce((accum, str) => {
+      const newAccum = `${accum + str}\n`;
+      return newAccum;
+    }, '');
+    return result;
+  };
+  return `{\n${getDiffInfo(tree, spacesCount)}}`;
 };
-
-const stylish = (parser) => `{\n${getDiffInfo(spacesCount, parser)}}`;
 
 export default stylish;

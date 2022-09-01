@@ -81,7 +81,7 @@ Property 'group3' was added with value: [complex value]`;
 
 const jsonResult = '[{"setting1":"Value 1","+setting4":"blah blah","+key5":"value5","-wow":"","+wow":"so much","key":"value","+ops":"vops","-baz":"bas","+baz":"bars","foo":"bar","+nest":"str"}]';
 
-const jsonResult2 = '[{"+setting1":"Value 1","+setting4":"blah blah","+key5":"value5","+wow":"so much","+key":"value","+ops":"vops","+baz":"bars","+foo":"bar","+nest":"str"}]';
+const jsonResult2 = '[{"+setting1":"Value 1","+setting4":"blah blah","+key5":"value5","+key":"value","+ops":"vops","+wow":"so much","+foo":"bar","+baz":"bars","+nest":"str"}]';
 
 export {
   stylishResult,

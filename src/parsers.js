@@ -11,6 +11,8 @@ const parserJson = (file1, file2) => {
 const parserYaml = (file1, file2) => {
   const object1 = yaml.load(fs.readFileSync(file1, 'utf-8'));
   const object2 = yaml.load(fs.readFileSync(file2, 'utf-8'));
+  if (object1 === undefined) return [{}, object2];
+  if (object2 === undefined) return [object1, {}];
   return [object1, object2];
 };
 
