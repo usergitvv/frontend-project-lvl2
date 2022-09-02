@@ -11,7 +11,6 @@ const plain = (tree) => {
       switch (obj.type) {
         case 'added':
           if (_.has(obj, 'children')) return `${prop}${obj.name}' was added with value: [complex value]`;
-          if (typeof obj.value === 'string' && obj.value === 'null') return `${prop}${obj.name}' was added with value: null`;
           if (typeof obj.value === 'string') return `${prop}${obj.name}' was added with value: '${obj.value}'`;
           if (typeof obj.value !== 'string') return `${prop}${obj.name}' was added with value: ${obj.value}`;
           return `${prop}${obj.name}' was added with value: [complex value]`;
@@ -28,14 +27,6 @@ const plain = (tree) => {
           && typeof obj.value1 === 'string') return `${prop}${obj.name}' was updated. From '${obj.value1}' to [complex value]`;
           if (typeof obj.value1 === 'string'
           && typeof obj.value2 === 'string') return `${prop}${obj.name}' was updated. From '${obj.value1}' to '${obj.value2}'`;
-          if (obj.value1 === 'null'
-            && typeof obj.value2 !== 'string') return `${prop}${obj.name}' was updated. From null to ${obj.value2}`;
-          if (obj.value2 === 'null'
-            && typeof obj.value1 !== 'string') return `${prop}${obj.name}' was updated. From ${obj.value1} to null`;
-          if (obj.value1 === 'null'
-            && typeof obj.value2 === 'string') return `${prop}${obj.name}' was updated. From null to '${obj.value2}'`;
-          if (obj.value2 === 'null'
-            && typeof obj.value1 === 'string') return `${prop}${obj.name}' was updated. From '${obj.value1}' to null`;
           return `${prop}${obj.name}' was updated. From ${obj.value1} to ${obj.value2}`;
         case 'nested': {
           const keyStrArr = [];
@@ -49,7 +40,7 @@ const plain = (tree) => {
       }
     });
     const result = _.compact(billet);
-    return result.join('\n');
+    return `${result.join('\n')}`;
   };
   return getMergeInfo(property, tree);
 };

@@ -8,9 +8,9 @@ const getNode = ([object, type, name, value, value1, value2, children]) => {
   billetNode1.value1 = value1;
   billetNode1.value2 = value2;
   billetNode1.children = children;
-  if (billetNode1.value === null) billetNode1.value = 'null';
-  if (billetNode1.value1 === null) billetNode1.value1 = 'null';
-  if (billetNode1.value2 === null) billetNode1.value2 = 'null';
+  if (billetNode1.value === null) billetNode1.value = `${null}`;
+  if (billetNode1.value1 === null) billetNode1.value1 = `${null}`;
+  if (billetNode1.value2 === null) billetNode1.value2 = `${null}`;
   const keysValues = Object.entries(billetNode1);
   const billetNode2 = keysValues.filter((item) => !item.includes(null));
   const keys = billetNode2.map((key) => key[0]);

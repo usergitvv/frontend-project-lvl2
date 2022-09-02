@@ -7,6 +7,7 @@ const ripObjectForKey = (sign, workpiece) => {
     if (_.isObject(arr[1])) return ripObjectForKey(sign, arr[1]);
     return null;
   }).filter((key) => key !== null);
+  console.log('keys array');
   return keys;
 };
 
@@ -34,19 +35,17 @@ const getKeys = (tree) => {
         if (_.has(obj, 'children')) return ripObjectForKey('+', obj.children);
         return null;
       case 'changed':
+        if (typeof obj.value1 === 'string' && typeof obj.value2 === 'string'
+        && obj.value1 !== 'null' && obj.value2 !== 'null') return [`-${obj.name}`, `+${obj.name}`];
         if (typeof obj.value1 === 'string' && obj.value1 !== 'null'
-          && typeof obj.value2 === 'string' && obj.value2 !== 'null') return [`-${obj.name}`, `+${obj.name}`];
-        if (typeof obj.value1 === 'string' && obj.value1 !== 'null'
-          && _.isObject(obj.value2)) return `-${obj.name}`;
+        && _.isObject(obj.value2)) return `-${obj.name}`;
         if (typeof obj.value2 === 'string' && obj.value2 !== 'null'
-          && _.isObject(obj.value1)) return `+${obj.name}`;
+        && _.isObject(obj.value1)) return `+${obj.name}`;
         if (_.isObject(obj.value1)) return ripObjectForKey([obj.value1]);
         if (_.isObject(obj.value2)) return ripObjectForKey([obj.value2]);
         return null;
       case 'nested':
         return getKeys(obj.children);
-      case undefined:
-        return false;
       default:
         throw new Error(`Unknown order state: '${obj.type}'!`);
     }
@@ -54,8 +53,8 @@ const getKeys = (tree) => {
   return result;
 };
 
-const getValues = (workpiece) => {
-  const result = workpiece.flatMap((obj) => {
+const getValues = (tree) => {
+  const result = tree.flatMap((obj) => {
     switch (obj.type) {
       case 'equal':
         return obj.value;
@@ -68,8 +67,8 @@ const getValues = (workpiece) => {
         if (_.has(obj, 'children')) return ripObjectForValue(obj.children);
         return null;
       case 'changed':
-        if (typeof obj.value1 === 'string' && obj.value1 !== 'null'
-          && typeof obj.value2 === 'string' && obj.value2 !== 'null') return [obj.value1, obj.value2];
+        if (typeof obj.value1 === 'string' && typeof obj.value2 === 'string'
+        && obj.value1 !== 'null' && obj.value2 !== 'null') return [obj.value1, obj.value2];
         if (_.isObject(obj.value1)
         && typeof obj.value2 === 'string' && obj.value2 !== 'null') return obj.value2;
         if (_.isObject(obj.value2)
