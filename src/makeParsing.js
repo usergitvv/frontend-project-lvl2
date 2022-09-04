@@ -8,9 +8,10 @@ import {
 } from './parsers.js';
 
 const getData = (track) => {
-  let data = fs.readFileSync(track);
+  const data = fs.readFileSync(track);
   if (!track.includes(process.cwd())) {
-    data = fs.readFileSync(path.resolve(`${process.cwd()}/${track}`));
+    const data2 = fs.readFileSync(path.resolve(`${process.cwd()}/${track}`));
+    return data2;
   }
   return data;
 };

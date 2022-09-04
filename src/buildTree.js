@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-const getNode = ([object, type, name, value, value1, value2, children]) => {
-  const billetNode1 = object;
+const getNode = ([type, name, value, value1, value2, children]) => {
+  const billetNode1 = {};
   billetNode1.type = type;
   billetNode1.name = name;
   billetNode1.value = value;
@@ -22,25 +22,25 @@ const getTree = (parcer) => {
   const object2 = parcer[1];
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
-  const common = _.uniq([...keys1, ...keys2]).sort();
-  const tree = common.flatMap((key) => {
-    const node = {};
+  const common = _.uniq([...keys1, ...keys2]);
+  const sortedCommon = common.sort();
+  const tree = sortedCommon.flatMap((key) => {
     const object1Key = Object.prototype.hasOwnProperty.call(object1, key);
     const object2Key = Object.prototype.hasOwnProperty.call(object2, key);
     if ((object1Key === object2Key) && (object1[key] === object2[key])) {
-      return getNode([node, 'equal', key, object1[key], undefined, undefined, undefined]);
+      return getNode(['equal', key, object1[key], undefined, undefined, undefined]);
     }
     if ((object1Key && !object2Key)) {
-      return getNode([node, 'removed', key, object1[key], undefined, undefined, undefined]);
+      return getNode(['removed', key, object1[key], undefined, undefined, undefined]);
     }
     if (!object1Key && object2Key) {
-      return getNode([node, 'added', key, object2[key], undefined, undefined, undefined]);
+      return getNode(['added', key, object2[key], undefined, undefined, undefined]);
     }
     if (object1Key === object2Key && _.isObject(object1[key]) && _.isObject(object2[key])) {
-      return getNode([node, 'nested', key, undefined, undefined, undefined, getTree([object1[key], object2[key]])]);
+      return getNode(['nested', key, undefined, undefined, undefined, getTree([object1[key], object2[key]])]);
     }
     if (object1Key === object2Key && object1[key] !== object2[key]) {
-      return getNode([node, 'changed', key, undefined, object1[key], object2[key], undefined]);
+      return getNode(['changed', key, undefined, object1[key], object2[key], undefined]);
     }
     return null;
   }).filter((item) => item !== null);

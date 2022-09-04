@@ -31,8 +31,8 @@ const plain = (tree) => {
           && typeof obj.value2 !== 'string') return `${prop}${obj.name}' was updated. From '${obj.value1}' to ${obj.value2}`;
           return `${prop}${obj.name}' was updated. From ${obj.value1} to ${obj.value2}`;
         case 'nested': {
-          const keyStrArr = [];
-          keyStrArr.push(obj.name);
+          let keyStrArr = '';
+          keyStrArr += obj.name;
           return `${getMergeInfo(`${prop}${keyStrArr}.`, obj.children)}`;
         }
         case 'equal':
