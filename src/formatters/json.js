@@ -1,10 +1,10 @@
 import _ from 'lodash';
 
-const ripObjectForKeys = (sign, workpiece) => {
+const ripObjectForKeys = (workpiece, sign) => {
   const keysValues = Object.entries(workpiece);
   const keys = keysValues.flatMap((arr) => {
     if (typeof arr[1] === 'string') return `${sign}${arr[0]}`;
-    if (_.isObject(arr[1])) return ripObjectForKeys(sign, arr[1]);
+    if (_.isObject(arr[1])) return ripObjectForKeys(arr[1], sign);
     return null;
   }).filter((key) => key !== null);
   return keys;
@@ -27,18 +27,18 @@ const getKeys = (tree) => {
         return obj.name;
       case 'removed':
         if (typeof obj.value === 'string') return `-${obj.name}`;
-        if (_.isObject(obj.value)) return ripObjectForKeys('-', obj.value);
+        if (_.isObject(obj.value)) return ripObjectForKeys(obj.value, '-');
         return null;
       case 'added':
         if (typeof obj.value === 'string') return `+${obj.name}`;
-        if (_.isObject(obj.value)) return ripObjectForKeys('+', obj.value);
+        if (_.isObject(obj.value)) return ripObjectForKeys(obj.value, '+');
         return null;
       case 'changed':
         if (typeof obj.value1 === 'string' && typeof obj.value2 === 'string') return [`-${obj.name}`, `+${obj.name}`];
         if (typeof obj.value1 === 'string') return `-${obj.name}`;
         if (typeof obj.value2 === 'string') return `+${obj.name}`;
-        if (_.isObject(obj.value1)) return ripObjectForKeys([obj.value1]);
-        if (_.isObject(obj.value2)) return ripObjectForKeys([obj.value2]);
+        if (_.isObject(obj.value1)) return ripObjectForKeys(obj.value1);
+        if (_.isObject(obj.value2)) return ripObjectForKeys(obj.value2);
         return null;
       case 'nested':
         return getKeys(obj.children);
@@ -66,8 +66,8 @@ const getValues = (tree) => {
         if (typeof obj.value1 === 'string' && typeof obj.value2 === 'string') return [obj.value1, obj.value2];
         if (typeof obj.value2 === 'string') return obj.value2;
         if (typeof obj.value1 === 'string') return obj.value1;
-        if (_.isObject(obj.value1)) return ripObjectForValues([obj.value1]);
-        if (_.isObject(obj.value2)) return ripObjectForValues([obj.value2]);
+        if (_.isObject(obj.value1)) return ripObjectForValues(obj.value1);
+        if (_.isObject(obj.value2)) return ripObjectForValues(obj.value2);
         return null;
       case 'nested':
         return getValues(obj.children);
