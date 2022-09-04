@@ -3,7 +3,7 @@ import { dirname } from 'path';
 import path from 'node:path';
 import genDiff from '../src/index.js';
 import {
-  stylishResult, stylishResult2, jsonResult, jsonResult2, plainResult,
+  stylishResult, stylishResult2, stylishResult3, jsonResult, jsonResult2, plainResult,
 } from '../__fixtures__/results.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,6 +16,7 @@ test.each([
   [getFixturePath('testEmptyFile.json'), getFixturePath('file2.json'), 'stylish', stylishResult2],
   [getFixturePath('file3.yml'), getFixturePath('file4.yml'), 'stylish', stylishResult],
   [getFixturePath('testEmptyFile.yaml'), getFixturePath('file4.yml'), 'stylish', stylishResult2],
+  [getFixturePath('newFile1.json'), getFixturePath('newFile2.json'), 'stylish', stylishResult3],
   [getFixturePath('testEmptyFile.json'), getFixturePath('file2.json'), 'plain', plainResult],
   [getFixturePath('file1.json'), getFixturePath('file2.json'), 'json', jsonResult],
   [getFixturePath('testEmptyFile.json'), getFixturePath('file2.json'), 'json', jsonResult2],

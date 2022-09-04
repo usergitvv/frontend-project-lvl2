@@ -8,11 +8,8 @@ const getNode = ([object, type, name, value, value1, value2, children]) => {
   billetNode1.value1 = value1;
   billetNode1.value2 = value2;
   billetNode1.children = children;
-  if (billetNode1.value === null) billetNode1.value = `${null}`;
-  if (billetNode1.value1 === null) billetNode1.value1 = `${null}`;
-  if (billetNode1.value2 === null) billetNode1.value2 = `${null}`;
   const keysValues = Object.entries(billetNode1);
-  const billetNode2 = keysValues.filter((item) => !item.includes(null));
+  const billetNode2 = keysValues.filter((item) => !item.includes(undefined));
   const keys = billetNode2.map((key) => key[0]);
   const values = billetNode2.map((meaning) => meaning[1]);
   const treeNode = _.zipObject(keys, values);
@@ -31,32 +28,19 @@ const getTree = (parcer) => {
     const object1Key = Object.prototype.hasOwnProperty.call(object1, key);
     const object2Key = Object.prototype.hasOwnProperty.call(object2, key);
     if ((object1Key === object2Key) && (object1[key] === object2[key])) {
-      return getNode([node, 'equal', key, object1[key], null, null, null]);
+      return getNode([node, 'equal', key, object1[key], undefined, undefined, undefined]);
     }
-    if ((object1Key === object2Key) && !_.isObject(object1[key]) && !_.isObject(object2[key])
-      && (object1[key] !== object2[key])) {
-      return getNode([node, 'changed', key, null, object1[key], object2[key], null]);
+    if ((object1Key && !object2Key)) {
+      return getNode([node, 'removed', key, object1[key], undefined, undefined, undefined]);
     }
-    if ((object1Key === object2Key) && _.isObject(object1[key]) && !_.isObject(object2[key])) {
-      return getNode([node, 'changed', key, null, object1[key], object2[key], null]);
-    }
-    if ((object1Key === object2Key) && !_.isObject(object1[key]) && _.isObject(object2[key])) {
-      return getNode([node, 'changed', key, null, object1[key], object2[key], null]);
-    }
-    if ((object1Key && !object2Key) && !_.isObject(object1[key])) {
-      return getNode([node, 'removed', key, object1[key], null, null, null]);
-    }
-    if (!object1Key && object2Key && !_.isObject(object2[key])) {
-      return getNode([node, 'added', key, object2[key], null, null, null]);
-    }
-    if (object1Key && !object2Key && _.isObject(object1[key])) {
-      return getNode([node, 'removed', key, null, null, null, [object1[key]]]);
-    }
-    if (!object1Key && object2Key && _.isObject(object2[key])) {
-      return getNode([node, 'added', key, null, null, null, [object2[key]]]);
+    if (!object1Key && object2Key) {
+      return getNode([node, 'added', key, object2[key], undefined, undefined, undefined]);
     }
     if (object1Key === object2Key && _.isObject(object1[key]) && _.isObject(object2[key])) {
-      return getNode([node, 'nested', key, null, null, null, getTree([object1[key], object2[key]])]);
+      return getNode([node, 'nested', key, undefined, undefined, undefined, getTree([object1[key], object2[key]])]);
+    }
+    if (object1Key === object2Key && object1[key] !== object2[key]) {
+      return getNode([node, 'changed', key, undefined, object1[key], object2[key], undefined]);
     }
     return null;
   }).filter((item) => item !== null);

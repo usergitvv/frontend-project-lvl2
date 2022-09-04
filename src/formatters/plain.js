@@ -10,23 +10,25 @@ const plain = (tree) => {
     const billet = workpiece.map((obj) => {
       switch (obj.type) {
         case 'added':
-          if (_.has(obj, 'children')) return `${prop}${obj.name}' was added with value: [complex value]`;
           if (typeof obj.value === 'string') return `${prop}${obj.name}' was added with value: '${obj.value}'`;
-          if (typeof obj.value !== 'string') return `${prop}${obj.name}' was added with value: ${obj.value}`;
+          if (typeof obj.value !== 'string'
+          && !_.isObject(obj.value)) return `${prop}${obj.name}' was added with value: ${obj.value}`;
           return `${prop}${obj.name}' was added with value: [complex value]`;
         case 'removed':
           return `${prop}${obj.name}' was removed`;
         case 'changed':
           if (_.isObject(obj.value1)
-          && typeof obj.value2 !== 'string') return `${prop}${obj.name}' was updated. From [complex value] to ${obj.value2}`;
-          if (_.isObject(obj.value2)
-          && typeof obj.value1 !== 'string') return `${prop}${obj.name}' was updated. From ${obj.value1} to [complex value]`;
-          if (_.isObject(obj.value1)
           && typeof obj.value2 === 'string') return `${prop}${obj.name}' was updated. From [complex value] to '${obj.value2}'`;
           if (_.isObject(obj.value2)
           && typeof obj.value1 === 'string') return `${prop}${obj.name}' was updated. From '${obj.value1}' to [complex value]`;
+          if (_.isObject(obj.value1)) return `${prop}${obj.name}' was updated. From [complex value] to ${obj.value2}`;
+          if (_.isObject(obj.value2)) return `${prop}${obj.name}' was updated. From ${obj.value1} to [complex value]`;
           if (typeof obj.value1 === 'string'
           && typeof obj.value2 === 'string') return `${prop}${obj.name}' was updated. From '${obj.value1}' to '${obj.value2}'`;
+          if (typeof obj.value1 !== 'string'
+          && typeof obj.value2 === 'string') return `${prop}${obj.name}' was updated. From ${obj.value1} to '${obj.value2}'`;
+          if (typeof obj.value1 === 'string'
+          && typeof obj.value2 !== 'string') return `${prop}${obj.name}' was updated. From '${obj.value1}' to ${obj.value2}`;
           return `${prop}${obj.name}' was updated. From ${obj.value1} to ${obj.value2}`;
         case 'nested': {
           const keyStrArr = [];

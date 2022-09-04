@@ -31,20 +31,20 @@ const stylish = (tree) => {
         case 'equal':
           return `${' '.repeat(spaceLength)}    ${obj.name}: ${obj.value}`;
         case 'removed':
-          if (_.has(obj, 'children')) {
-            return `${' '.repeat(spaceLength)}  - ${obj.name}: ${getObjectString(obj.children[0], spaceLength)}`;
+          if (_.isObject(obj.value)) {
+            return `${' '.repeat(spaceLength)}  - ${obj.name}: ${getObjectString(obj.value, spaceLength)}`;
           }
           return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value}`;
         case 'added':
-          if (_.has(obj, 'children')) {
-            return `${' '.repeat(spaceLength)}  + ${obj.name}: ${getObjectString(obj.children[0], spaceLength)}`;
+          if (_.isObject(obj.value)) {
+            return `${' '.repeat(spaceLength)}  + ${obj.name}: ${getObjectString(obj.value, spaceLength)}`;
           }
           return `${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value}`;
         case 'changed':
-          if (_.isObject(obj.value1)) {
+          if (_.isObject(obj.value1) && !_.isObject(obj.value2)) {
             return `${' '.repeat(spaceLength)}  - ${obj.name}: ${getObjectString(obj.value1, spaceLength)}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value2}`;
           }
-          if (_.isObject(obj.value2)) {
+          if (!_.isObject(obj.value1) && _.isObject(obj.value2)) {
             return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value1}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${getObjectString(obj.value2, spaceLength)}`;
           }
           return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value1}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value2}`;
