@@ -1,13 +1,14 @@
 import _ from 'lodash';
 
 const getNode = ([type, name, value, value1, value2, children]) => {
-  const billetNode1 = {};
-  billetNode1.type = type;
-  billetNode1.name = name;
-  billetNode1.value = value;
-  billetNode1.value1 = value1;
-  billetNode1.value2 = value2;
-  billetNode1.children = children;
+  const billetNode1 = {
+    type,
+    name,
+    value,
+    value1,
+    value2,
+    children,
+  };
   const keysValues = Object.entries(billetNode1);
   const billetNode2 = keysValues.filter((item) => !item.includes(undefined));
   const keys = billetNode2.map((key) => key[0]);

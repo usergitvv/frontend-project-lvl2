@@ -8,12 +8,12 @@ import {
 } from './parsers.js';
 
 const getData = (track) => {
-  const data = fs.readFileSync(track);
   if (!track.includes(process.cwd())) {
-    const data2 = fs.readFileSync(path.resolve(`${process.cwd()}/${track}`));
-    return data2;
+    const data1 = fs.readFileSync(path.resolve(`${process.cwd()}/${track}`));
+    return data1;
   }
-  return data;
+  const data2 = fs.readFileSync(track);
+  return data2;
 };
 
 const makeParsing = (path1, path2) => {
