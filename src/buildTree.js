@@ -17,14 +17,26 @@ const getNode = ([type, name, value, value1, value2, children]) => {
   return treeNode;
 };
 
-const getTree = (parcer) => {
-  if (parcer === null) return null;
+const getKeys = (parcer) => {
   const object1 = parcer[0];
   const object2 = parcer[1];
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
-  const common = _.uniq([...keys1, ...keys2]).sort();
-  const tree = common.flatMap((key) => {
+  const uniq = _.uniq([...keys1, ...keys2]);
+  const commonKeys = uniq.map((key) => {
+    const keysObject = {
+      key,
+    };
+    return keysObject;
+  });
+  return [commonKeys, object1, object2];
+};
+
+const getTree = (parcer) => {
+  if (parcer === null) return null;
+  const [commonKeys, object1, object2] = getKeys(parcer);
+  const sortedKeys = _.sortBy(commonKeys, ['key']).map((obj) => obj.key);
+  const tree = sortedKeys.flatMap((key) => {
     const object1Key = Object.prototype.hasOwnProperty.call(object1, key);
     const object2Key = Object.prototype.hasOwnProperty.call(object2, key);
     if ((object1Key === object2Key) && (object1[key] === object2[key])) {
