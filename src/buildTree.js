@@ -23,9 +23,8 @@ const getTree = (parcer) => {
   const object2 = parcer[1];
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
-  const common = _.uniq([...keys1, ...keys2]);
-  const sortedCommon = common.sort();
-  const tree = sortedCommon.flatMap((key) => {
+  const common = _.uniq([...keys1, ...keys2]).sort();
+  const tree = common.flatMap((key) => {
     const object1Key = Object.prototype.hasOwnProperty.call(object1, key);
     const object2Key = Object.prototype.hasOwnProperty.call(object2, key);
     if ((object1Key === object2Key) && (object1[key] === object2[key])) {
