@@ -1,5 +1,5 @@
 # Name of workflow
-name: Make_git-hub-checking_with_GithubAction
+name: Make_git-hub-checking_for_project2
 
 # Trigger the workflow on push or pull request
 on:
