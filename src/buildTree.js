@@ -1,7 +1,9 @@
 import _ from 'lodash';
 
 const getTree = ([data1, data2]) => {
-  const uniqKeys = _.uniq([...Object.keys(data1), ...Object.keys(data2)])
+  const object1 = data1;
+  const object2 = data2;
+  const uniqKeys = _.uniq([...Object.keys(object1), ...Object.keys(object2)])
     .map((key) => {
       const keysObject = {
         key,
@@ -10,23 +12,23 @@ const getTree = ([data1, data2]) => {
     });
   const sortedKeys = _.sortBy(uniqKeys, ['key']).map((obj) => obj.key);
   const tree = sortedKeys.flatMap((key) => {
-    const data1Key = Object.prototype.hasOwnProperty.call(data1, key);
-    const data2Key = Object.prototype.hasOwnProperty.call(data2, key);
-    if ((data1Key === data2Key) && (data1[key] === data2[key])) {
-      return { type: 'unchanged', name: key, value: data1[key] };
+    const object1Key = Object.prototype.hasOwnProperty.call(object1, key);
+    const object2Key = Object.prototype.hasOwnProperty.call(object2, key);
+    if ((object1Key === object2Key) && (object1[key] === object2[key])) {
+      return { type: 'unchanged', name: key, value: object1[key] };
     }
-    if ((data1Key && !data2Key)) {
-      return { type: 'removed', name: key, value: data1[key] };
+    if ((object1Key && !object2Key)) {
+      return { type: 'removed', name: key, value: object1[key] };
     }
-    if (!data1Key && data2Key) {
-      return { type: 'added', name: key, value: data2[key] };
+    if (!object1Key && object2Key) {
+      return { type: 'added', name: key, value: object2[key] };
     }
-    if (data1Key === data2Key && _.isObject(data1[key]) && _.isObject(data2[key])) {
-      return { type: 'nested', name: key, children: getTree([data1[key], data2[key]]) };
+    if (object1Key === object2Key && _.isObject(object1[key]) && _.isObject(object2[key])) {
+      return { type: 'nested', name: key, children: getTree([object1[key], object2[key]]) };
     }
-    if (data1Key === data2Key && data1[key] !== data2[key]) {
+    if (object1Key === object2Key && object1[key] !== object2[key]) {
       return {
-        type: 'changed', name: `${key}`, value1: data1[key], value2: data2[key],
+        type: 'changed', name: `${key}`, value1: object1[key], value2: object2[key],
       };
     }
     return null;
