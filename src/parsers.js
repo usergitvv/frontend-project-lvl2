@@ -5,12 +5,9 @@ import fs from 'fs';
 import path from 'path';
 
 const readFile = (track) => {
-  if (!track.includes(process.cwd())) {
-    const data1 = fs.readFileSync(path.resolve(`${process.cwd()}/${track}`));
-    return data1;
-  }
-  const data2 = fs.readFileSync(track);
-  return data2;
+  const fullPath = path.resolve(process.cwd(), track);
+  const data = fs.readFileSync(fullPath).toString();
+  return data;
 };
 
 const parserJson = (file) => JSON.parse(file);
