@@ -2,21 +2,39 @@ import yaml from 'js-yaml';
 
 import fs from 'fs';
 
-const parserJson = (file1, file2) => {
-  const object1 = JSON.parse(file1);
-  const object2 = JSON.parse(file2);
-  return [object1, object2];
+import path from 'path';
+
+const readFile = (track) => {
+  const fullPath = path.resolve(process.cwd(), track);
+  const data = fs.readFileSync(fullPath).toString();
+  return data;
 };
 
-const parserYaml = (file1, file2) => {
-  const object1 = yaml.load(fs.readFileSync(file1, 'utf-8'));
-  const object2 = yaml.load(fs.readFileSync(file2, 'utf-8'));
-  if (object1 === undefined) return [{}, object2];
-  if (object2 === undefined) return [object1, {}];
-  return [object1, object2];
+const parserJson = (file) => JSON.parse(file);
+
+const parserYaml = (file) => {
+  if (yaml.load(fs.readFileSync(file, 'utf-8')) === undefined) return {};
+  return yaml.load(fs.readFileSync(file, 'utf-8'));
 };
 
-export {
-  parserJson,
-  parserYaml,
+const makeParsing = (paths) => {
+  const roots = [].concat(paths);
+  const data = roots.map((track) => readFile(track));
+  const extensions = roots.map((track) => path.extname(track));
+  const filtered = extensions.map((item) => {
+    switch (item) {
+      case '.json':
+        return item;
+      case '.yaml':
+        return item;
+      case '.yml':
+        return item;
+      default:
+        throw new Error(`Unknown order state: '${item}'!`);
+    }
+  });
+  if (!filtered.includes('.json')) return roots.map((item) => parserYaml(item));
+  return data.map((item) => parserJson(item));
 };
+
+export default makeParsing;

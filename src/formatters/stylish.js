@@ -1,15 +1,13 @@
 import _ from 'lodash';
 
-const spacesCount = 0;
-
 const getObjectString = (object, spaceLength) => {
   const getString = (obj, length) => {
     const objInfo = Object.entries(obj);
     const result = objInfo.map((item) => {
       if (_.isObject(item[1])) {
-        return `${' '.repeat(length + 8)}${item[0]}: {\n${getString(item[1], length + 4)}${' '.repeat(length + 8)}}`;
+        return `${' '.repeat(length + 4)}${item[0]}: {\n${getString(item[1], length + 4)}${' '.repeat(length + 4)}}`;
       }
-      return `${' '.repeat(length + 8)}${item[0]}: ${item[1]}`;
+      return `${' '.repeat(length + 4)}${item[0]}: ${item[1]}`;
     })
       .reduce((acc, elem) => {
         const newAcc = `${acc + elem}\n`;
@@ -17,39 +15,39 @@ const getObjectString = (object, spaceLength) => {
       }, '');
     return result;
   };
-  return `{\n${getString(object, spaceLength)}${' '.repeat(spaceLength + 4)}}`;
+  return `{\n${getString(object, spaceLength)}${' '.repeat(spaceLength)}}`;
+};
+
+const valueProcessing = (value, indent) => {
+  switch (typeof value) {
+    case 'object':
+      if (value === null) return null;
+      return getObjectString(value, indent);
+    case 'string':
+    case 'boolean':
+    case 'number':
+      return value;
+    default:
+      throw new Error(`Unknown order state: '${value}'!`);
+  }
 };
 
 const stylish = (tree) => {
-  if (tree === null) {
-    return `📣 Error, it is working with .json, .yml (.yaml) formats only!
-    Also, both of files must to have same format.`;
-  }
-  const getDiffInfo = (workpiece, spaceLength) => {
+  const spacesCount = 4;
+  const getDiffInfo = (workpiece, depth) => {
+    const spaceLength = spacesCount * depth;
     const result = workpiece.map((obj) => {
       switch (obj.type) {
-        case 'equal':
-          return `${' '.repeat(spaceLength)}    ${obj.name}: ${obj.value}`;
+        case 'unchanged':
+          return `${' '.repeat(spaceLength)}${obj.name}: ${obj.value}`;
         case 'removed':
-          if (_.isObject(obj.value)) {
-            return `${' '.repeat(spaceLength)}  - ${obj.name}: ${getObjectString(obj.value, spaceLength)}`;
-          }
-          return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value}`;
+          return `${' '.repeat(spaceLength - 2)}- ${obj.name}: ${valueProcessing(obj.value, spaceLength)}`;
         case 'added':
-          if (_.isObject(obj.value)) {
-            return `${' '.repeat(spaceLength)}  + ${obj.name}: ${getObjectString(obj.value, spaceLength)}`;
-          }
-          return `${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value}`;
+          return `${' '.repeat(spaceLength - 2)}+ ${obj.name}: ${valueProcessing(obj.value, spaceLength)}`;
         case 'changed':
-          if (_.isObject(obj.value1) && !_.isObject(obj.value2)) {
-            return `${' '.repeat(spaceLength)}  - ${obj.name}: ${getObjectString(obj.value1, spaceLength)}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value2}`;
-          }
-          if (!_.isObject(obj.value1) && _.isObject(obj.value2)) {
-            return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value1}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${getObjectString(obj.value2, spaceLength)}`;
-          }
-          return `${' '.repeat(spaceLength)}  - ${obj.name}: ${obj.value1}\n${' '.repeat(spaceLength)}  + ${obj.name}: ${obj.value2}`;
+          return `${' '.repeat(spaceLength - 2)}- ${obj.name}: ${valueProcessing(obj.value1, spaceLength)}\n${' '.repeat(spaceLength - 2)}+ ${obj.name}: ${valueProcessing(obj.value2, spaceLength)}`;
         case 'nested':
-          return `${' '.repeat(spaceLength)}    ${obj.name}: {\n${getDiffInfo(obj.children, spaceLength + 4)}${' '.repeat(spaceLength + 2)}  }`;
+          return `${' '.repeat(spaceLength)}${obj.name}: {\n${getDiffInfo(obj.children, depth + 1)}${' '.repeat(spaceLength - 2)}  }`;
         default:
           throw new Error(`Unknown order state: '${obj.type}'!`);
       }
@@ -59,7 +57,7 @@ const stylish = (tree) => {
     }, '');
     return result;
   };
-  return `{\n${getDiffInfo(tree, spacesCount)}}`;
+  return `{\n${getDiffInfo(tree, 1)}}`;
 };
 
 export default stylish;

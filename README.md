@@ -22,5 +22,5 @@
 #### Пример работы пакета "Вычислитель отличий" - сравнение сложных файлов через форматтер plain (example of working the "Difference Calculator" package - comparison of complex files by help of plain-formatter):
 [![asciicast](https://asciinema.org/a/Ifj1M4sG7iLx12JVDekuaLE83.svg)](https://asciinema.org/a/Ifj1M4sG7iLx12JVDekuaLE83)
 
-#### Пример работы пакета "Вычислитель отличий" - сравнение сложных файлов через форматтер json (example of working the "Difference Calculator" package - comparison of complex files by help of json-formatter):
-[![asciicast](https://asciinema.org/a/y8h8Ss1HhYdBVE5B1Fv4iguBp.svg)](https://asciinema.org/a/y8h8Ss1HhYdBVE5B1Fv4iguBp)
+#### Пример работы пакета "Вычислитель отличий" - форматтер json, вывод структуры дерева (ast) (example of working the "Difference Calculator" package - formatter json, output of ast's structure):
+[![asciicast](https://asciinema.org/a/V7CzO6luGxW9MJEwEGIfeDzdv.svg)](https://asciinema.org/a/V7CzO6luGxW9MJEwEGIfeDzdv)

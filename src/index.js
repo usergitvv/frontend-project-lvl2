@@ -1,9 +1,9 @@
 import getResult from './formatters/index.js';
 import getTree from './buildTree.js';
-import makeParsing from './makeParsing.js';
+import makeParsing from './parsers.js';
 
-const genDiff = (path1, path2, formatName) => {
-  const tree = getTree(makeParsing(path1, path2));
+const genDiff = (paths, formatName) => {
+  const tree = getTree(makeParsing(paths));
   return getResult(formatName, tree);
 };
 
