@@ -1,8 +1,6 @@
 import _ from 'lodash';
 
-const getTree = (data) => {
-  const data1 = data[0];
-  const data2 = data[1];
+const getTree = ([data1, data2]) => {
   const uniqKeys = _.uniq([...Object.keys(data1), ...Object.keys(data2)])
     .map((key) => {
       const keysObject = {
