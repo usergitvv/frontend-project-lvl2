@@ -12,29 +12,27 @@ const readFile = (track) => {
 
 const parserJson = (file) => JSON.parse(file);
 
-const parserYaml = (file) => {
-  if (yaml.load(fs.readFileSync(file, 'utf-8')) === undefined) return {};
-  return yaml.load(fs.readFileSync(file, 'utf-8'));
+const parserYaml = (track) => {
+  if (yaml.load(fs.readFileSync(track, 'utf-8')) === undefined) return {};
+  return yaml.load(fs.readFileSync(track, 'utf-8'));
 };
 
-const makeParsing = (paths) => {
-  const roots = [...paths];
-  const data = roots.map((track) => readFile(track));
-  const extensions = roots.map((track) => path.extname(track));
-  const filtered = extensions.map((item) => {
-    switch (item) {
-      case '.json':
-        return item;
-      case '.yaml':
-        return item;
-      case '.yml':
-        return item;
-      default:
-        throw new Error(`Unknown order state: '${item}'!`);
-    }
-  });
-  if (!filtered.includes('.json')) return roots.map((item) => parserYaml(item));
-  return data.map((item) => parserJson(item));
+const makeParsing = (track) => {
+  const data = readFile(track);
+  const extension = path.extname(track);
+  switch (extension) {
+    case '.json':
+      return parserJson(data);
+    case '.yaml':
+    case '.yml':
+      return parserYaml(track);
+    default:
+      throw new Error(`Unknown order state: '${extension}'!`);
+  }
 };
 
-export default makeParsing;
+export default (path1, path2) => {
+  const data1 = makeParsing(path1);
+  const data2 = makeParsing(path2);
+  return [data1, data2];
+};

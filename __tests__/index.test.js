@@ -18,20 +18,20 @@ test.each([
   ['testEmptyFile.yaml', 'file4.yml', 'stylish', stylishResult2],
   ['testEmptyFile.json', 'file2.json', 'plain', plainResult],
 ])('diff_from_formatters', (path1, path2, formatter, result) => {
-  expect(genDiff([getFixturePath(path1), getFixturePath(path2)], formatter)).toEqual(result);
+  expect(genDiff(getFixturePath(path1), getFixturePath(path2), formatter)).toEqual(result);
 });
 
 test('expected_diff_with_default_formatter', () => {
-  expect(genDiff([getFixturePath('file3.yml'), getFixturePath('file4.yml')]))
+  expect(genDiff(getFixturePath('file3.yml'), getFixturePath('file4.yml')))
     .toEqual(stylishResult);
 });
 
 test('expected_typeof_from_json', () => {
-  expect(typeof (genDiff([getFixturePath('file3.yml'), getFixturePath('file4.yml')], 'json')))
+  expect(typeof (genDiff(getFixturePath('file3.yml'), getFixturePath('file4.yml'), 'json')))
     .toEqual('string');
 });
 
 test('expected_empty_string', () => {
-  expect(typeof (genDiff([getFixturePath('file3.yml'), getFixturePath('file4.yml')], 'plain')))
+  expect(typeof (genDiff(getFixturePath('file3.yml'), getFixturePath('file4.yml'), 'plain')))
     .toContain('');
 });
