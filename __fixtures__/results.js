@@ -45,7 +45,7 @@ const stylishResult = `{
     }
     group4: {
       - default: null
-      + default: true
+      + default:${' '}
       - foo: 0
       + foo: null
       - isNested: false
@@ -96,7 +96,7 @@ const stylishResult2 = `{
         fee: 100500
     }
   + group4: {
-        default: true
+        default:${' '}
         foo: null
         isNested: none
         key: false

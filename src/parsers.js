@@ -31,8 +31,4 @@ const makeParsing = (track) => {
   }
 };
 
-export default (path1, path2) => {
-  const data1 = makeParsing(path1);
-  const data2 = makeParsing(path2);
-  return [data1, data2];
-};
+export default (paths) => paths.map((track) => makeParsing(track));

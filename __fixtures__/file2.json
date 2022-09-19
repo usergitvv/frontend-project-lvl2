@@ -34,7 +34,7 @@
   },
 
   "group4": {
-    "default": true,
+    "default": "",
     "foo": null,
     "isNested": "none",
     "key": false,
