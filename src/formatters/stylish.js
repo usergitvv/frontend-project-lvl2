@@ -18,7 +18,7 @@ const getObjectString = (object, spaceLength) => {
   return `{\n${getString(object, spaceLength)}${' '.repeat(spaceLength)}}`;
 };
 
-const valueProcessing = (value, indent) => {
+const makeValue = (value, indent) => {
   switch (typeof value) {
     case 'object':
       if (value === null) return null;
@@ -32,6 +32,8 @@ const valueProcessing = (value, indent) => {
   }
 };
 
+const makeIndent = (size, correction) => ' '.repeat(size - correction);
+
 const stylish = (tree) => {
   const spacesCount = 4;
   const getDiffInfo = (workpiece, depth) => {
@@ -39,15 +41,15 @@ const stylish = (tree) => {
     const result = workpiece.map((obj) => {
       switch (obj.type) {
         case 'unchanged':
-          return `${' '.repeat(spaceLength)}${obj.name}: ${obj.value}`;
+          return `${makeIndent(spaceLength, 0)}${obj.name}: ${obj.value}`;
         case 'removed':
-          return `${' '.repeat(spaceLength - 2)}- ${obj.name}: ${valueProcessing(obj.value, spaceLength)}`;
+          return `${makeIndent(spaceLength, 2)}- ${obj.name}: ${makeValue(obj.value, spaceLength)}`;
         case 'added':
-          return `${' '.repeat(spaceLength - 2)}+ ${obj.name}: ${valueProcessing(obj.value, spaceLength)}`;
+          return `${makeIndent(spaceLength, 2)}+ ${obj.name}: ${makeValue(obj.value, spaceLength)}`;
         case 'changed':
-          return `${' '.repeat(spaceLength - 2)}- ${obj.name}: ${valueProcessing(obj.value1, spaceLength)}\n${' '.repeat(spaceLength - 2)}+ ${obj.name}: ${valueProcessing(obj.value2, spaceLength)}`;
+          return `${makeIndent(spaceLength, 2)}- ${obj.name}: ${makeValue(obj.value1, spaceLength)}\n${makeIndent(spaceLength, 2)}+ ${obj.name}: ${makeValue(obj.value2, spaceLength)}`;
         case 'nested':
-          return `${' '.repeat(spaceLength)}${obj.name}: {\n${getDiffInfo(obj.children, depth + 1)}${' '.repeat(spaceLength - 2)}  }`;
+          return `${makeIndent(spaceLength, 0)}${obj.name}: {\n${getDiffInfo(obj.children, depth + 1)}${makeIndent(spaceLength, 2)}  }`;
         default:
           throw new Error(`Unknown order state: '${obj.type}'!`);
       }
