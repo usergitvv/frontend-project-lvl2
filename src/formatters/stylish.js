@@ -1,13 +1,15 @@
 import _ from 'lodash';
 
+const makeIndent = (size, correction) => ' '.repeat(size - correction);
+
 const getObjectString = (object, spaceLength) => {
   const getString = (obj, length) => {
     const objInfo = Object.entries(obj);
     const result = objInfo.map((item) => {
       if (_.isObject(item[1])) {
-        return `${' '.repeat(length + 4)}${item[0]}: {\n${getString(item[1], length + 4)}${' '.repeat(length + 4)}}`;
+        return `${makeIndent(length, -4)}${item[0]}: {\n${getString(item[1], length + 4)}${makeIndent(length, -4)}}`;
       }
-      return `${' '.repeat(length + 4)}${item[0]}: ${item[1]}`;
+      return `${makeIndent(length, -4)}${item[0]}: ${item[1]}`;
     })
       .reduce((acc, elem) => {
         const newAcc = `${acc + elem}\n`;
@@ -15,7 +17,7 @@ const getObjectString = (object, spaceLength) => {
       }, '');
     return result;
   };
-  return `{\n${getString(object, spaceLength)}${' '.repeat(spaceLength)}}`;
+  return `{\n${getString(object, spaceLength)}${makeIndent(spaceLength, 0)}}`;
 };
 
 const makeValue = (value, indent) => {
@@ -31,8 +33,6 @@ const makeValue = (value, indent) => {
       throw new Error(`Unknown order state: '${value}'!`);
   }
 };
-
-const makeIndent = (size, correction) => ' '.repeat(size - correction);
 
 const stylish = (tree) => {
   const spacesCount = 4;

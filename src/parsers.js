@@ -2,20 +2,10 @@ import yaml from 'js-yaml';
 
 import fs from 'fs';
 
-import path from 'path';
+const parserJson = (data) => JSON.parse(data);
 
-const readFile = (track) => {
-  const fullPath = path.resolve(process.cwd(), track);
-  const data = fs.readFileSync(fullPath).toString();
-  return data;
-};
+const parserYaml = (path) => yaml.load(fs.readFileSync(path, 'utf-8'));
 
-const parserJson = (file) => JSON.parse(file);
+const makeParsing = (path) => parserJson(JSON.stringify(parserYaml(path)));
 
-const parserYaml = (track) => yaml.load(fs.readFileSync(track, 'utf-8'));
-
-export {
-  readFile,
-  parserJson,
-  parserYaml,
-};
+export default (paths) => paths.map((path) => makeParsing(path));
