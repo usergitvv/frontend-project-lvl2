@@ -6,7 +6,7 @@ const getObjectString = (object, spaceLength) => {
   const getString = (obj, length) => {
     const objInfo = Object.entries(obj);
     const result = objInfo.map((item) => {
-      if (_.isObject(item[1])) {
+      if (_.isPlainObject(item[1])) {
         return `${makeIndent(length, -4)}${item[0]}: {\n${getString(item[1], length + 4)}${makeIndent(length, -4)}}`;
       }
       return `${makeIndent(length, -4)}${item[0]}: ${item[1]}`;
