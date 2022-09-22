@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getTree = ([data1, data2]) => {
+const getTree = (data1, data2) => {
   const keys = _.union(Object.keys(data1), Object.keys(data2));
   const sortedKeys = _.sortBy(keys);
   const tree = sortedKeys.flatMap((key) => {
@@ -11,7 +11,7 @@ const getTree = ([data1, data2]) => {
       return { type: 'added', name: key, value: data2[key] };
     }
     if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-      return { type: 'nested', name: key, children: getTree([data1[key], data2[key]]) };
+      return { type: 'nested', name: key, children: getTree(data1[key], data2[key]) };
     }
     if (!_.isEqual(data1[key], data2[key])) {
       return {
