@@ -3,21 +3,17 @@ import _ from 'lodash';
 const makeIndent = (size, correction) => ' '.repeat(size - correction);
 
 const getObjectString = (object, spaceLength) => {
-  const getString = (obj, length) => {
+  const iter = (obj, length) => {
     const objInfo = Object.entries(obj);
     const result = objInfo.map((item) => {
       if (_.isPlainObject(item[1])) {
-        return `${makeIndent(length, -4)}${item[0]}: {\n${getString(item[1], length + 4)}${makeIndent(length, -4)}}`;
+        return `${makeIndent(length, -4)}${item[0]}: {\n${iter(item[1], length + 4)}\n${makeIndent(length, -4)}}`;
       }
       return `${makeIndent(length, -4)}${item[0]}: ${item[1]}`;
-    })
-      .reduce((acc, elem) => {
-        const newAcc = `${acc + elem}\n`;
-        return newAcc;
-      }, '');
+    }).join('\n');
     return result;
   };
-  return `{\n${getString(object, spaceLength)}${makeIndent(spaceLength, 0)}}`;
+  return `{\n${iter(object, spaceLength)}\n${makeIndent(spaceLength, 0)}}`;
 };
 
 const stringify = (value, indent) => {
@@ -36,7 +32,7 @@ const stringify = (value, indent) => {
 
 const stylish = (tree) => {
   const spacesCount = 4;
-  const getDiffInfo = (workpiece, depth) => {
+  const iter = (workpiece, depth) => {
     const spaceLength = spacesCount * depth;
     const result = workpiece.map((obj) => {
       switch (obj.type) {
@@ -47,19 +43,17 @@ const stylish = (tree) => {
         case 'added':
           return `${makeIndent(spaceLength, 2)}+ ${obj.name}: ${stringify(obj.value, spaceLength)}`;
         case 'changed':
-          return `${makeIndent(spaceLength, 2)}- ${obj.name}: ${stringify(obj.value1, spaceLength)}\n${makeIndent(spaceLength, 2)}+ ${obj.name}: ${stringify(obj.value2, spaceLength)}`;
+          return [`${makeIndent(spaceLength, 2)}- ${obj.name}: ${stringify(obj.value1, spaceLength)}`,
+            `${makeIndent(spaceLength, 2)}+ ${obj.name}: ${stringify(obj.value2, spaceLength)}`].join('\n');
         case 'nested':
-          return `${makeIndent(spaceLength, 0)}${obj.name}: {\n${getDiffInfo(obj.children, depth + 1)}${makeIndent(spaceLength, 2)}  }`;
+          return `${makeIndent(spaceLength, 0)}${obj.name}: {\n${iter(obj.children, depth + 1)}\n${makeIndent(spaceLength, 2)}  }`;
         default:
           throw new Error(`Unknown order state: '${obj.type}'!`);
       }
-    }).reduce((accum, str) => {
-      const newAccum = `${accum + str}\n`;
-      return newAccum;
-    }, '');
+    }).join('\n');
     return result;
   };
-  return `{\n${getDiffInfo(tree, 1)}}`;
+  return `{\n${iter(tree, 1)}\n}`;
 };
 
 export default stylish;

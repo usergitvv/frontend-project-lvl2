@@ -2,15 +2,18 @@ import plain from './plain.js';
 
 import stylish from './stylish.js';
 
-const getResult = (formatter, tree) => {
-  switch (formatter) {
+const format = (type, tree) => {
+  switch (type) {
+    case 'stylish':
+    case undefined:
+      return stylish(tree);
     case 'plain':
       return plain(tree);
     case 'json':
       return JSON.stringify(tree);
     default:
-      return stylish(tree);
+      throw new Error(`Unknown order state: '${type}'!`);
   }
 };
 
-export default getResult;
+export default format;

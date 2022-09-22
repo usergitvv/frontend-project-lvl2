@@ -27,8 +27,7 @@ const plain = (tree) => {
         case 'changed':
           return `${prop}${node.name}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
         case 'nested': {
-          const keyStrArr = [].concat([node.name]);
-          return `${iter(`${prop}${keyStrArr}.`, node.children)}`;
+          return `${iter(`${prop}${[].concat([node.name])}.`, node.children)}`;
         }
         case 'unchanged':
           return null;
