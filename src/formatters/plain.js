@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const makeValue = (value) => {
+const stringify = (value) => {
   switch (typeof value) {
     case 'string':
       return `'${value}'`;
@@ -17,29 +17,29 @@ const makeValue = (value) => {
 
 const plain = (tree) => {
   const property = 'Property \'';
-  const getMergeInfo = (prop, workpiece) => {
-    const billet = workpiece.map((obj) => {
-      switch (obj.type) {
+  const iter = (prop, workpiece) => {
+    const billet = workpiece.map((node) => {
+      switch (node.type) {
         case 'added':
-          return `${prop}${obj.name}' was added with value: ${makeValue(obj.value)}`;
+          return `${prop}${node.name}' was added with value: ${stringify(node.value)}`;
         case 'removed':
-          return `${prop}${obj.name}' was removed`;
+          return `${prop}${node.name}' was removed`;
         case 'changed':
-          return `${prop}${obj.name}' was updated. From ${makeValue(obj.value1)} to ${makeValue(obj.value2)}`;
+          return `${prop}${node.name}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
         case 'nested': {
-          const keyStrArr = [].concat([obj.name]);
-          return `${getMergeInfo(`${prop}${keyStrArr}.`, obj.children)}`;
+          const keyStrArr = [].concat([node.name]);
+          return `${iter(`${prop}${keyStrArr}.`, node.children)}`;
         }
         case 'unchanged':
           return null;
         default:
-          throw new Error(`Unknown order state: '${obj.type}'!`);
+          throw new Error(`Unknown order state: '${node.type}'!`);
       }
     });
     const result = _.compact(billet);
     return `${result.join('\n')}`;
   };
-  return getMergeInfo(property, tree);
+  return iter(property, tree);
 };
 
 export default plain;

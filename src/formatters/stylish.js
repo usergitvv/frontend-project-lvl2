@@ -20,7 +20,7 @@ const getObjectString = (object, spaceLength) => {
   return `{\n${getString(object, spaceLength)}${makeIndent(spaceLength, 0)}}`;
 };
 
-const makeValue = (value, indent) => {
+const stringify = (value, indent) => {
   switch (typeof value) {
     case 'object':
       if (value === null) return null;
@@ -43,11 +43,11 @@ const stylish = (tree) => {
         case 'unchanged':
           return `${makeIndent(spaceLength, 0)}${obj.name}: ${obj.value}`;
         case 'removed':
-          return `${makeIndent(spaceLength, 2)}- ${obj.name}: ${makeValue(obj.value, spaceLength)}`;
+          return `${makeIndent(spaceLength, 2)}- ${obj.name}: ${stringify(obj.value, spaceLength)}`;
         case 'added':
-          return `${makeIndent(spaceLength, 2)}+ ${obj.name}: ${makeValue(obj.value, spaceLength)}`;
+          return `${makeIndent(spaceLength, 2)}+ ${obj.name}: ${stringify(obj.value, spaceLength)}`;
         case 'changed':
-          return `${makeIndent(spaceLength, 2)}- ${obj.name}: ${makeValue(obj.value1, spaceLength)}\n${makeIndent(spaceLength, 2)}+ ${obj.name}: ${makeValue(obj.value2, spaceLength)}`;
+          return `${makeIndent(spaceLength, 2)}- ${obj.name}: ${stringify(obj.value1, spaceLength)}\n${makeIndent(spaceLength, 2)}+ ${obj.name}: ${stringify(obj.value2, spaceLength)}`;
         case 'nested':
           return `${makeIndent(spaceLength, 0)}${obj.name}: {\n${getDiffInfo(obj.children, depth + 1)}${makeIndent(spaceLength, 2)}  }`;
         default:
