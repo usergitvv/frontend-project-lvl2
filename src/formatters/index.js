@@ -1,11 +1,9 @@
 import plain from './plain.js';
-
 import stylish from './stylish.js';
 
 const format = (type, tree) => {
   switch (type) {
     case 'stylish':
-    case undefined:
       return stylish(tree);
     case 'plain':
       return plain(tree);

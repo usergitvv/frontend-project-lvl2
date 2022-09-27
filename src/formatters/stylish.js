@@ -1,26 +1,29 @@
 import _ from 'lodash';
 
-const makeIndent = (size, correction) => ' '.repeat(size - correction);
+const makeIndent = (spaces, correction) => ' '.repeat(spaces - correction);
 
-const getObjectString = (object, spaceLength) => {
-  const iter = (obj, length) => {
+const indent = 4;
+
+const getObjectString = (object, objindent) => {
+  const iter = (obj, spaces) => {
     const objInfo = Object.entries(obj);
     const result = objInfo.map((item) => {
       if (_.isPlainObject(item[1])) {
-        return `${makeIndent(length, -4)}${item[0]}: {\n${iter(item[1], length + 4)}\n${makeIndent(length, -4)}}`;
+        return [`${makeIndent(spaces, -indent)}${item[0]}: {\n${iter(item[1], spaces + indent)}`,
+          `${makeIndent(spaces, -indent)}}`].join('\n');
       }
-      return `${makeIndent(length, -4)}${item[0]}: ${item[1]}`;
+      return `${makeIndent(spaces, -indent)}${item[0]}: ${item[1]}`;
     }).join('\n');
     return result;
   };
-  return `{\n${iter(object, spaceLength)}\n${makeIndent(spaceLength, 0)}}`;
+  return `{\n${iter(object, objindent)}\n${makeIndent(objindent, 0)}}`;
 };
 
-const stringify = (value, indent) => {
+const stringify = (value, spaces) => {
   switch (typeof value) {
     case 'object':
       if (value === null) return null;
-      return getObjectString(value, indent);
+      return getObjectString(value, spaces);
     case 'string':
     case 'boolean':
     case 'number':
@@ -31,22 +34,22 @@ const stringify = (value, indent) => {
 };
 
 const stylish = (tree) => {
-  const spacesCount = 4;
   const iter = (workpiece, depth) => {
-    const spaceLength = spacesCount * depth;
+    const indentDepth = indent * depth;
     const result = workpiece.map((obj) => {
       switch (obj.type) {
         case 'unchanged':
-          return `${makeIndent(spaceLength, 0)}${obj.name}: ${obj.value}`;
+          return `${makeIndent(indentDepth, 0)}${obj.name}: ${obj.value}`;
         case 'removed':
-          return `${makeIndent(spaceLength, 2)}- ${obj.name}: ${stringify(obj.value, spaceLength)}`;
+          return `${makeIndent(indentDepth, indent / 2)}- ${obj.name}: ${stringify(obj.value, indentDepth)}`;
         case 'added':
-          return `${makeIndent(spaceLength, 2)}+ ${obj.name}: ${stringify(obj.value, spaceLength)}`;
+          return `${makeIndent(indentDepth, indent / 2)}+ ${obj.name}: ${stringify(obj.value, indentDepth)}`;
         case 'changed':
-          return [`${makeIndent(spaceLength, 2)}- ${obj.name}: ${stringify(obj.value1, spaceLength)}`,
-            `${makeIndent(spaceLength, 2)}+ ${obj.name}: ${stringify(obj.value2, spaceLength)}`].join('\n');
+          return [`${makeIndent(indentDepth, indent / 2)}- ${obj.name}: ${stringify(obj.value1, indentDepth)}`,
+            `${makeIndent(indentDepth, indent / 2)}+ ${obj.name}: ${stringify(obj.value2, indentDepth)}`].join('\n');
         case 'nested':
-          return `${makeIndent(spaceLength, 0)}${obj.name}: {\n${iter(obj.children, depth + 1)}\n${makeIndent(spaceLength, 2)}  }`;
+          return [`${makeIndent(indentDepth, 0)}${obj.name}: {\n${iter(obj.children, depth + 1)}`,
+            `${makeIndent(indentDepth, indent / 2)}  }`].join('\n');
         default:
           throw new Error(`Unknown order state: '${obj.type}'!`);
       }
