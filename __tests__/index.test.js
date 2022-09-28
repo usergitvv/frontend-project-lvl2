@@ -1,12 +1,14 @@
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 import path from 'path';
 import genDiff from '../src/index.js';
-import { stylishResult, plainResult } from '../__fixtures__/results.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const plainResult = fs.readFileSync(getFixturePath('plain-result.txt')).toString();
+const stylishResult = fs.readFileSync(getFixturePath('stylish-result.txt')).toString();
 
 test.each([
   ['file1.json', 'file2.json', 'stylish', stylishResult],
