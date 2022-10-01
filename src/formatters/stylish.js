@@ -33,7 +33,7 @@ const stringify = (value, spaces) => {
   }
 };
 
-const stylish = (tree) => {
+const makeStylish = (tree) => {
   const iter = (workpiece, depth) => {
     const indentDepth = indent * depth;
     const result = workpiece.map((obj) => {
@@ -59,4 +59,4 @@ const stylish = (tree) => {
   return `{\n${iter(tree, 1)}\n}`;
 };
 
-export default stylish;
+export default makeStylish;

@@ -15,7 +15,7 @@ const stringify = (value) => {
   }
 };
 
-const plain = (tree) => {
+const makePlain = (tree) => {
   const property = 'Property \'';
   const iter = (prop, workpiece) => {
     const billet = workpiece.map((node) => {
@@ -26,9 +26,8 @@ const plain = (tree) => {
           return `${prop}${node.name}' was removed`;
         case 'changed':
           return `${prop}${node.name}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
-        case 'nested': {
+        case 'nested':
           return `${iter(`${prop}${[node.name]}.`, node.children)}`;
-        }
         case 'unchanged':
           return null;
         default:
@@ -41,4 +40,4 @@ const plain = (tree) => {
   return iter(property, tree);
 };
 
-export default plain;
+export default makePlain;

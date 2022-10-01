@@ -1,12 +1,12 @@
-import plain from './plain.js';
-import stylish from './stylish.js';
+import makePlain from './plain.js';
+import makeStylish from './stylish.js';
 
 const format = (type, tree) => {
   switch (type) {
     case 'stylish':
-      return stylish(tree);
+      return makeStylish(tree);
     case 'plain':
-      return plain(tree);
+      return makePlain(tree);
     case 'json':
       return JSON.stringify(tree);
     default:
